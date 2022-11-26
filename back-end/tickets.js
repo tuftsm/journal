@@ -10,35 +10,35 @@ app.use(bodyParser.urlencoded({
 const mongoose = require('mongoose');
 
 // connect to the database
-mongoose.connect('mongodb://localhost:27017/journal', {
+mongoose.connect('mongodb://localhost:27017/test', {
   useUnifiedTopology: true,
   useNewUrlParser: true
 });
 
-const ticketSchema = new mongoose.Schema({
-  name: String,
-  problem: String,
+const journalSchema = new mongoose.Schema({
+  date: String,
+  info: String,
 });
 
 // create a virtual paramter that turns the default _id field into id
-ticketSchema.virtual('id')
+journalSchema.virtual('id')
   .get(function() {
     return this._id.toHexString();
   });
 
 // Ensure virtual fields are serialised when we turn this into a JSON object
-ticketSchema.set('toJSON', {
+journalSchema.set('toJSON', {
   virtuals: true
 });
 
 // create a model for tickets
-const Ticket = mongoose.model('Ticket', ticketSchema);
+const Entry = mongoose.model('Entry', journalSchema);
 
-app.get('/api/tickets', async (req, res) => {
+app.get('/api/entries', async (req, res) => {
   try {
-    let tickets = await Ticket.find();
+    let entries = await Entry.find();
     res.send({
-      tickets: tickets
+      entries: entries
     });
   } catch (error) {
     console.log(error);
@@ -46,15 +46,15 @@ app.get('/api/tickets', async (req, res) => {
   }
 });
 
-app.post('/api/tickets', async (req, res) => {
-  const ticket = new Ticket({
+app.post('/api/entries', async (req, res) => {
+  const entry = new Entry({
     name: req.body.name,
-    problem: req.body.problem
+    info: req.body.info
   });
   try {
-    await ticket.save();
+    await entry.save();
     res.send({
-      ticket: ticket
+      entry: entry
     });
   } catch (error) {
     console.log(error);
@@ -62,9 +62,9 @@ app.post('/api/tickets', async (req, res) => {
   }
 });
 
-app.delete('/api/tickets/:id', async (req, res) => {
+app.delete('/api/entries/:id', async (req, res) => {
   try {
-    await Ticket.deleteOne({
+    await Entry.deleteOne({
       _id: req.params.id
     });
     res.sendStatus(200);

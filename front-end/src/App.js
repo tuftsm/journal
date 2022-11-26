@@ -4,80 +4,80 @@ import './App.css';
 
 function App() {
   // setup state
-  const [tickets, setTickets] = useState([]);
+  const [entries, setEntries] = useState([]);
   const [error, setError] = useState("");
-  const [name, setName] = useState("");
-  const [problem, setProblem] = useState("");
+  const [date, setDate] = useState("");
+  const [info, setInfo] = useState("");
 
-  const fetchTickets = async() => {
+  const fetchEntries = async() => {
     try {      
-      const response = await axios.get("/api/tickets");
-      setTickets(response.data.tickets);
+      const response = await axios.get("/api/entries");
+      setEntries(response.data.entries);
     } catch(error) {
-      setError("error retrieving tickets: " + error);
+      setError("error retrieving entries: " + error);
     }
   }
-  const createTicket = async() => {
+  const createEntry = async() => {
     try {
-      await axios.post("/api/tickets", {name: name, problem: problem});
+      await axios.post("/api/entries", {date: date, info: info});
     } catch(error) {
-      setError("error adding a ticket: " + error);
+      setError("error adding an entry: " + error);
     }
   }
-  const deleteOneTicket = async(ticket) => {
+  const deleteOneEntry = async(entry) => {
     try {
-      await axios.delete("/api/tickets/" + ticket.id);
+      await axios.delete("/api/entries/" + entry.id);
     } catch(error) {
-      setError("error deleting a ticket" + error);
+      setError("error deleting an entry" + error);
     }
   }
 
   // fetch ticket data
   useEffect(() => {
-    fetchTickets();
+    fetchEntries();
   },[]);
 
-  const addTicket = async(e) => {
+  const addEntry = async(e) => {
     e.preventDefault();
-    await createTicket();
-    fetchTickets();
-    setName("");
-    setProblem("");
+    await createEntry();
+    fetchEntries();
+    setDate("");
+    setInfo("");
   }
 
-  const deleteTicket = async(ticket) => {
-    await deleteOneTicket(ticket);
-    fetchTickets();
+  const deleteEntry = async(entry) => {
+    await deleteOneEntry(entry);
+    fetchEntries();
   }
 
   // render results
   return (
     <div className="App">
       {error}
-      <h1>Create a Ticket</h1>
-      <form onSubmit={addTicket}>
+      <h1>Create an Entry</h1>
+      <form onSubmit={addEntry}>
         <div>
           <label>
-            Name:
-            <input type="text" value={name} onChange={e => setName(e.target.value)} />
+            Date:
+            <input type="text" value={date} onChange={e => setDate(e.target.value)} />
           </label>
         </div>
         <div>
           <label>
-            Problem:
-            <textarea value={problem} onChange={e=>setProblem(e.target.value)}></textarea>
+            Info:
+            <textarea value={info} onChange={e=>setInfo(e.target.value)}></textarea>
           </label>
         </div>
         <input type="submit" value="Submit" />
       </form>
-      <h1>Tickets</h1>
-      {tickets.map( ticket => (
-        <div key={ticket.id} className="ticket">
-          <div className="problem">
-            <p>{ticket.problem}</p>
-            <p><i>-- {ticket.name}</i></p>
+      <h1>Past Info</h1>
+      {entries.map( entry => (
+        <div key={entry.id} className="entry">
+          <div className="info">
+            <p>{entry.info}</p>
+            <p><i>-- {entry.date}</i></p>
           </div>
-          <button onClick={e => deleteTicket(ticket)}>Delete</button>
+          <button onClick={e => deleteEntry(entry)}>Delete</button>
         </div>
       ))}     
     </div>
