@@ -8,6 +8,7 @@ function App() {
   const [error, setError] = useState("");
   const [date, setDate] = useState("");
   const [info, setInfo] = useState("");
+  const [highlight, setHighlight] = useState("");
 
   const fetchEntries = async() => {
     try {      
@@ -19,7 +20,7 @@ function App() {
   }
   const createEntry = async() => {
     try {
-      await axios.post("/api/entries", {date: date, info: info});
+      await axios.post("/api/entries", {date: date, info: info, highlight: highlight});
     } catch(error) {
       setError("error adding an entry: " + error);
     }
@@ -43,6 +44,7 @@ function App() {
     fetchEntries();
     setDate("");
     setInfo("");
+    setHighlight("");
   }
 
   const deleteEntry = async(entry) => {
@@ -68,6 +70,12 @@ function App() {
             <textarea value={info} onChange={e=>setInfo(e.target.value)}></textarea>
           </label>
         </div>
+        <div>
+          <label>
+            Highlight:
+            <textarea value={highlight} onChange={e=>setHighlight(e.target.value)}></textarea>
+          </label>
+        </div>
         <input type="submit" value="Submit" />
       </form>
       <h1>Past Info</h1>
@@ -75,6 +83,7 @@ function App() {
         <div key={entry.id} className="entry">
           <div className="info">
             <p>{entry.info}</p>
+            <p>{entry.highlight}</p>
             <p><i>-- {entry.date}</i></p>
           </div>
           <button onClick={e => deleteEntry(entry)}>Delete</button>

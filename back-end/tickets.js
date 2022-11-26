@@ -18,6 +18,7 @@ mongoose.connect('mongodb://localhost:27017/test', {
 const journalSchema = new mongoose.Schema({
   date: String,
   info: String,
+  highlight: String
 });
 
 // create a virtual paramter that turns the default _id field into id
@@ -48,8 +49,9 @@ app.get('/api/entries', async (req, res) => {
 
 app.post('/api/entries', async (req, res) => {
   const entry = new Entry({
-    name: req.body.name,
-    info: req.body.info
+    date: req.body.date,
+    info: req.body.info,
+    highlight: req.body.highlight
   });
   try {
     await entry.save();
