@@ -1,6 +1,10 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import ReactDOM from "react-dom/client";
+import styles from './styles.module.css';
+import Container from 'react-bootstrap/Container';
+import Col from 'react-bootstrap/Col';
+import Row from 'react-bootstrap/Row';
 
 const Plan = () => {
   // setup state
@@ -60,42 +64,54 @@ const Plan = () => {
 
   // render results
   return (
+    <div>
+    <div className={styles.workout}>
+    <br/><br/>
+    <div className={styles.records}>
+        Workout Records <br/>
+    </div>
+    <br/>
     <div className="App">
       {error}
-      <h1>Efforts to Become Stronger</h1>
+      <Row>
+      <Col>
+      <h1>Enter an Exercise</h1>
       <form onSubmit={addPlan}>
         <div>
           <label>
-            Exercise:
-            <textarea value={exercise} onChange={e=>setExercise(e.target.value)}></textarea>
+            Exercise: <br/>
+            <textarea value={exercise} rows="3" cols="40" onChange={e=>setExercise(e.target.value)}></textarea>
           </label>
         </div>
         <div>
           <label>
-            Sets:
-            <textarea value={sets} onChange={e=>setSets(e.target.value)}></textarea>
+            Sets: <br/>
+            <input type="text" value={sets} onChange={e=>setSets(e.target.value)} />
           </label>
         </div>   
         <div>
           <label>
-            Reps:
-            <textarea value={reps} onChange={e=>setReps(e.target.value)}></textarea>
+            Reps: <br/>
+            <input type="text" value={reps} onChange={e=>setReps(e.target.value)} />
           </label>
         </div>
         <div>
           <label>
-             Date:
+             Date: <br/>
             <input type="text" value={date} onChange={e => setDate(e.target.value)} />
           </label>
         </div>
         <div>
           <label>
-            Time:
-            <textarea value={time} onChange={e=>setTime(e.target.value)}></textarea>
+            Time: <br/>
+            <input type="text" value={time} onChange={e=>setTime(e.target.value)} />
           </label>
         </div>
         <input type="submit" value="Submit" />
+        <br/><br/><br/>
       </form>
+      </Col>
+      <Col>
       <h1>Past Info</h1>
       {planner.map( plan => (
         <div key={plan.id} className="plan">
@@ -106,6 +122,10 @@ const Plan = () => {
           </div>
         </div>
       ))}
+      </Col>
+      </Row>
+      </div>
+    </div>
     </div>
   );
 }

@@ -1,6 +1,10 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import ReactDOM from "react-dom/client";
+import styles from './styles.module.css';
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 
 const Personal = () => {
   // setup state
@@ -58,41 +62,65 @@ const Personal = () => {
 
   // render results
   return (
+    <div>
+    <div className={styles.personal}>
+    <br/><br/>
+    <div className={styles.whoops}>
+        Personal Journal <br/>
+    </div>
     <div className="App">
       {error}
-      <h1>Create an Entry</h1>
+      <Row>
+      <Col>
+      <h1>New Entry</h1>
       <form onSubmit={addEntry}>
         <div>
           <label>
-            Date:
+            Highlights: <br/>
+            <textarea value={highlight} rows="6" cols="60" onChange={e=>setHighlight(e.target.value)}></textarea>
+          </label>
+        </div>
+        <div>
+          <label>
+            Things to Improve:<br/>
+            <textarea value={info} rows="6" cols="60" onChange={e=>setInfo(e.target.value)}></textarea>
+          </label>
+        </div>
+        <div>
+          <label>
+            Date: <br/>
             <input type="text" value={date} onChange={e => setDate(e.target.value)} />
           </label>
         </div>
-        <div>
-          <label>
-            Info:
-            <textarea value={info} onChange={e=>setInfo(e.target.value)}></textarea>
-          </label>
-        </div>
-        <div>
-          <label>
-            Highlight:
-            <textarea value={highlight} onChange={e=>setHighlight(e.target.value)}></textarea>
-          </label>
-        </div>
+        <br/>
         <input type="submit" value="Submit" />
       </form>
-      <h1>Past Info</h1>
+      <br/><br/><br/>
+      </Col>
+      <Col>
+      <h1>Past Entries</h1>
       {entries.map( entry => (
         <div key={entry.id} className="entry">
           <div className="info">
-            <p>{entry.info}</p>
-            <p>{entry.highlight}</p>
-            <p><i>-- {entry.date}</i></p>
+          <div className={styles.date}>
+            <p><u><b>{entry.date}</b></u></p>
           </div>
-          <button onClick={e => deleteEntry(entry)}>Delete</button>
+            <p><b>Highlights:</b> <br/>{entry.highlight}</p>
+            <p><b>Improvements: </b><br/>{entry.info}</p>
+          </div>
+          <button onClick={e => deleteEntry(entry)}>Erase</button>
+          <br/><br/><br/>
         </div>
       ))}
+    <br/><br/>      
+    </Col>
+    </Row>
+    </div>
+    </div>
+            <div className={styles.footer}>
+            Utilized with <em>Github classroom</em>&emsp;&emsp;&emsp;
+            All images licensed for use with <em>Creative Commons</em> licensing. The creator of this website does not claim to own any images.
+            </div>
     </div>
   );
 }

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import ReactDOM from "react-dom/client";
 import React from 'react';
-import 'bootstrap/dist/css/bootstrap.css';
+import styles from './styles.module.css';
 import Container from 'react-bootstrap/Container';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
@@ -80,53 +80,75 @@ const Academics = () => {
 
   // render results
   return (
+    <div>
+    <div className={styles.academic}>
+    <br/><br/>
+    <div className={styles.whoops}>
+        Academic Planner <br/>
+    </div>
+    <br/>
     <div className="App">
       {error}
-      <h1>Create a Calendar</h1>
+      <Row>
+      <Col>
+      <h1>New Assignment</h1>
       <form onSubmit={addAssignment}>
         <div>
           <label>
-             Course:
-            <input type="text" value={course} onChange={e => setCourse(e.target.value)} />
+            Assignment: <br/>
+            <textarea value={assignment} rows="3" cols="40" onChange={e=>setAssignment(e.target.value)}></textarea>
+          </label>
+        </div>      
+        <div>
+          <label>
+             Class: <br/>
+            <textarea value={course} rows="3" cols="40" onChange={e=>setCourse(e.target.value)}></textarea>
           </label>
         </div>
         <div>
           <label>
-            Assignment:
-            <textarea value={assignment} onChange={e=>setAssignment(e.target.value)}></textarea>
+            Due Date: <br/>
+            <input type="text" value={due} onChange={e => setDue(e.target.value)} />
           </label>
         </div>
         <div>
           <label>
-            Due Date:
-            <textarea value={due} onChange={e=>setDue(e.target.value)}></textarea>
-          </label>
-        </div>
-        <div>
-          <label>
-            Completed? (%):
-            <textarea value={completion} onChange={e=>setCompletion(e.target.value)}></textarea>
+            Completed? (%): <br/>
+            <input type="text" value={completion} onChange={e=>setCompletion(e.target.value)} />
           </label>
         </div>
         <input type="submit" value="Submit" />
+        <br/><br/><br/>
       </form>
-      <h1>Working On: </h1>
+      </Col>
+      <Col>
+      <h1>Working On </h1>
       {calendar.map( assignment => (
         <form onSubmit={updateAssignment}>
         <div key={assignment.id} className="assignment">
           <div className="assignment">
-            <p>Assignment: {assignment.course}</p>
-            <p>Course: {assignment.assignment}</p>
-            <p>Due: {assignment.due}</p>
-            <p>Completion: {assignment.completion}</p>
-            Update Completion % 
-            <input type="text" value={updated} onChange={e => setUpdated(e.target.value)} />
+          <div className={styles.date}>
+            <p><u><b>{assignment.assignment}</b></u><br/></p>
           </div>
+            <p><b>Class: </b><br/>{assignment.course}</p>
+            <p><b>Due: </b><br/>{assignment.due}</p>
+            <p><b>Completion: </b><br/>{assignment.completion}%</p>
+            Update Completion %  <br/>
+            <input type="text" value={updated} onChange={e => setUpdated(e.target.value)} />
+            <button onClick={e => updateAssignment(assignment)}>Update</button>
+          </div><br/>
           <button onClick={e => deleteAssignment(assignment)}>Complete</button>
         </div>
-        <input type="submit" value="Submit" />
         </form>
       ))}
+      </Col>
+      </Row>
+    </div>
+    </div>
+            <div className={styles.academicfooter}>
+            Utilized with <em>Github classroom</em>&emsp;&emsp;&emsp;
+            All images licensed for use with <em>Creative Commons</em> licensing. The creator of this website does not claim to own any images.
+            </div>
     </div>
   );
 }
