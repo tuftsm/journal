@@ -16,7 +16,7 @@ function Home() {
             <div className={styles.topRight}><em>All Your Records.<br/>All Together.</em></div>
         </div>
         <div className={styles.homefooter}>
-            Utilized with <em>Github classroom</em>&emsp;&emsp;&emsp;
+            &emsp;&emsp;&emsp;Utilized with <em><a href="https://github.com/tuftsm/journal.git" target="_blank">Github classroom</a></em>&emsp;&emsp;&emsp;
             All images licensed for use with <em>Creative Commons</em> licensing. The creator of this website does not claim to own any images.
         </div>
         </div>

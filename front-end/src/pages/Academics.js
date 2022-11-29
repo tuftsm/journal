@@ -44,7 +44,7 @@ const Academics = () => {
   
   const updateOneAssignment = async(assignment) => {
     try {
-      await axios.put("/api/calendar" + assignment.id + assignment.updated);
+      await axios.put("/api/calendar/" + assignment.id, {completion:assignment.completion});
     } catch(error) {
       setError("error updating an assignment: " + error);
     }
@@ -72,7 +72,7 @@ const Academics = () => {
   }
  
  const updateAssignment = async(assignment) => {
-   console.log("updated: ", assignment.updated);
+   console.log("updated: ", assignment.completion);
    await updateOneAssignment(assignment);
    fetchCalendar();
  }
@@ -117,24 +117,27 @@ const Academics = () => {
             <input type="text" value={completion} onChange={e=>setCompletion(e.target.value)} />
           </label>
         </div>
+        <br/>
         <input type="submit" value="Submit" />
         <br/><br/><br/>
       </form>
       </Col>
       <Col>
-      <h1>Working On </h1>
+      <h1><u>Working On </u></h1>
       {calendar.map( assignment => (
-        <form onSubmit={updateAssignment}>
+        <form onSubmit={e => e.preventDefault()}>
         <div key={assignment.id} className="assignment">
           <div className="assignment">
           <div className={styles.date}>
-            <p><u><b>{assignment.assignment}</b></u><br/></p>
+            <p><b>{assignment.assignment}</b><br/></p>
           </div>
             <p><b>Class: </b><br/>{assignment.course}</p>
             <p><b>Due: </b><br/>{assignment.due}</p>
             <p><b>Completion: </b><br/>{assignment.completion}%</p>
             Update Completion %  <br/>
-            <input type="text" value={updated} onChange={e => setUpdated(e.target.value)} />
+            <input type="text" value={assignment.completion} onChange={e => setCalendar(calendar.map( newAssignment => {if (newAssignment == assignment) {
+            newAssignment.completion = e.target.value}
+            return newAssignment}))} />
             <button onClick={e => updateAssignment(assignment)}>Update</button>
           </div><br/>
           <button onClick={e => deleteAssignment(assignment)}>Complete</button>
@@ -146,7 +149,7 @@ const Academics = () => {
     </div>
     </div>
             <div className={styles.academicfooter}>
-            Utilized with <em>Github classroom</em>&emsp;&emsp;&emsp;
+             &emsp;&emsp;&emsp;Utilized with <em><a href="https://github.com/tuftsm/journal.git" target="_blank">Github classroom</a></em>&emsp;&emsp;&emsp;
             All images licensed for use with <em>Creative Commons</em> licensing. The creator of this website does not claim to own any images.
             </div>
     </div>

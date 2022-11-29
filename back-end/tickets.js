@@ -146,6 +146,7 @@ const calendarSchema = new mongoose.Schema({
   course: String,
   assignment: String,
   due: String,
+  updated: String,
   completion: String
 });
 
@@ -193,24 +194,30 @@ app.post('/api/calendar', async (req, res) => {
   }
 });
 
-app.put('/api/calendar/:id/:quantity', async (req, res) => {
+app.put('/api/calendar/:id', async (req, res) => {
   console.log("In put");
-  let id = parseInt(req.params.id);
-  let completion = parseInt(req.params.completion);
-    if (completion == "100") {
-        let removeIndex = Assignment.map(deleteItem => {
-            return deleteItem.id;
-        })
-        .indexOf(id);
-        Assignment.splice(removeIndex, 1);
-        res.sendStatus(200);
-        return;
-      }
-      else {
-          Assignment.completion = completion;
-          res.send(Assignment);
-      }
-  });
+  let id = (req.params.id);
+  let updatedValue = parseInt(req.body.completion);
+  try {
+    if (updatedValue >= 100) {
+      await Assignment.deleteOne({
+        _id: id
+      });
+      res.sendStatus(200);
+    }
+  else {
+    let planner = await Assignment.update({_id: id}, { $set: {completion: updatedValue}})
+      console.log('in else: ');
+        res.send({
+          planner
+          });
+    }
+  }
+  catch (error) {
+    console.log(error);
+    res.sendStatus(500);
+  }
+});
 
 app.delete('/api/calendar/:id', async (req, res) => {
   try {
